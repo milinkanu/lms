@@ -18,7 +18,11 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.post('/clerk', express.json(), clerkWebhookHandler);
+app.post('/clerk', express.json({
+    verify: (req, res, buf) => {
+        req.rawBody = buf.toString();
+    }
+}), clerkWebhookHandler);
 
 //Server
 const PORT = process.env.PORT || 5000;
