@@ -1,5 +1,8 @@
 import { Webhook } from "svix";
 import User from "../models/User.model.js";
+import Stripe from "stripe";
+import Purchase from "../models/Purchase.model.js";
+import Course from "../models/Course.model.js";
 
 // Api controller funtion to Manage Clerk User with database
 
@@ -68,3 +71,69 @@ export const clerkWebhookHandler = async (req, res) => {
     }
 }
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export const stripeWebhook = async (req, res) => {
+    const sig = req.headers["stripe-signature"];
+
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    } catch (error) {
+        res.status(400).send("Webhook Error: " + error.message);
+    }
+
+    // Handle the event
+    switch (event.type) {
+        case 'payment_intent.succeeded': {
+            const paymentIntent = event.data.object;
+            const paymentIntentId = paymentIntent.id;
+
+
+            const session = await stripe.checkout.sessions.list({
+                payment_intent: paymentIntentId,
+            });
+
+            const { purchaseId } = session.data[0].metadata;
+            const purchase = await Purchase.findById(purchaseId);
+            const userData = await User.findById(purchase.userId);
+            const courseData = await Course.findById(purchase.courseId);
+
+            courseData.enrolledStudents.push(userData)
+            await courseData.save();
+
+            userData.enrolledCourses.push(courseData._id)
+            await userData.save();
+
+            purchase.status = "completed";
+            await purchase.save();
+
+            break;
+        }
+        case 'payment_intent.payment_failed': {
+            const paymentIntent = event.data.object;
+            const paymentIntentId = paymentIntent.id;
+
+            const session = await stripe.checkout.sessions.list({
+                payment_intent: paymentIntentId,
+            });
+
+            const { purchaseId } = session.data[0].metadata;
+            const purchase = await Purchase.findById(purchaseId);
+            const userData = await User.findById(purchase.userId);
+            const courseData = await Course.findById(purchase.courseId);
+
+            purchase.status = "failed";
+            await purchase.save();
+
+            break;
+        }
+        // ... handle other event types
+        default:
+            console.log(`Unhandled event type ${event.type}`);
+    }
+
+    // Return a response to acknowledge receipt of the event
+    res.json({ received: true });
+}

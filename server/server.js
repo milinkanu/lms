@@ -3,12 +3,19 @@ import 'dotenv/config';
 import cors from "cors";
 import connectDB from "./configs/mongodb.js";
 import { clerkWebhookHandler } from "./controllers/webhooks.js";
+import educatorRouter from "./routes/educatorRoutes.js";
+import courseRouter from "./routes/courseRoutes.js";
+import { clerkMiddleware } from "@clerk/express";
+import connectCloudinary from "./configs/cloudinary.js";
+import userRouter from "./routes/userRoutes.js";
+import { stripeWebhook } from "./controllers/webhooks.js";
 
 //Initialize app
 const app = express();
 
 //Connect to MongoDB
-connectDB();
+await connectDB();
+await connectCloudinary();
 
 //Middleware
 app.use((req, res, next) => {
@@ -16,6 +23,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(cors()); //we can connect backend to any domain
+app.use(clerkMiddleware());
 
 //Routes
 app.get('/', (req, res) => {
@@ -27,6 +35,11 @@ app.post('/clerk', express.json({
         req.rawBody = buf.toString();
     }
 }), clerkWebhookHandler);
+
+app.use('/api/educator', express.json(), educatorRouter);
+app.use('/api/course', express.json(), courseRouter);
+app.use('/api/user', express.json(), userRouter);
+app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhook);
 
 //Server
 const PORT = process.env.PORT || 5000;
