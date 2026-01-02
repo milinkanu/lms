@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { assets } from "../../assets/assets";
 import { Link } from "react-router-dom";
 
-import SocialIcons from "../SocialIcons";
+// import SocialIcons from "../SocialIcons";
 
 const Footer = () => {
 	// Added subscription state
@@ -68,7 +68,7 @@ const Footer = () => {
 					</div>
 					<div className=" ml-8 mt-5 md:ml-0 md:mt-0">
 
-					<SocialIcons />
+					{/* <SocialIcons /> */}
 					</div>
 				</div>
 			</div>
