@@ -180,16 +180,28 @@ export const educatorDashboardData = async (req, res) => {
         const enrolledStudents = await Purchase.find({
             courseId: { $in: courseIds },
             status: 'completed'
-        });
-        const totalEarning = enrolledStudents.reduce((total, purchase) => total + purchase.amount, 0);
-        const enrolledStudentsCount = enrolledStudents.length;
-        const coursesCount = courses.length;
+        })
+            .populate('userId', 'name imageUrl')
+            .populate('courseId', 'courseTitle');
+
+        const totalEarnings = enrolledStudents.reduce((total, purchase) => total + purchase.amount, 0);
+
+        const enrolledStudentsData = enrolledStudents.map(p => ({
+            student: {
+                name: p.userId.name,
+                imageUrl: p.userId.imageUrl,
+            },
+            courseTitle: p.courseId.courseTitle,
+        }));
+
         res.json({
             status: "success",
             message: "Dashboard data fetched successfully.",
-            totalEarning,
-            enrolledStudentsCount,
-            coursesCount,
+            dashboardData: {
+                totalEarnings,
+                enrolledStudentsData,
+                totalCourses: courses.length,
+            }
         });
     } catch (error) {
         res.json({

@@ -1,11 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import uniqid from 'uniqid'
 import Quill from 'quill'
 import { assets } from '../../assets/assets'
 import 'quill/dist/quill.snow.css'
 import Logger from '../../components/educator/Logger'
+import { toast } from 'react-toastify'
+import axios from 'axios'
+import { AppContext } from '../../context/AppContext'
 
 const AddCourse = () => {
+
+  const { backendUrl, getToken } = useContext(AppContext)
 
   const quillRef = useRef(null)
   const editorRef = useRef(null)
@@ -95,15 +100,47 @@ const AddCourse = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    // console.log({
-    //   courseTitle,
-    //   courseDescription: quillRef.current.root.innerHTML,
-    //   coursePrice,
-    //   discount,
-    //   image,
-    //   chapters
-    // })
+    try {
+      e.preventDefault()
+      if (!image) {
+        toast.error("Please upload an image")
+      }
+
+      const courseData = {
+        courseTitle,
+        courseDescription: quillRef.current.root.innerHTML,
+        coursePrice: Number(coursePrice),
+        discount: Number(discount),
+        courseContent: chapters,
+        courseImage: image
+      }
+
+      const formData = new FormData()
+      formData.append("courseData", JSON.stringify(courseData))
+      formData.append("image", image)
+
+      const token = await getToken()
+      const { data } = await axios.post(`${backendUrl}/api/educator/add-course`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${token}`
+        }
+      })
+
+      if (data.status === 'success') {
+        toast.success(data.message)
+        setCourseTitle('')
+        quillRef.current.root.innerHTML = ''
+        setCoursePrice(0)
+        setDiscount(0)
+        setChapters([])
+        setImage(null)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   return (

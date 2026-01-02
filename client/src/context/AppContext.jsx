@@ -139,7 +139,6 @@ export const AppContextProvider = (props) => {
 
     useEffect(() => {
         fetchAllCourses()
-        fetchUserData()
     }, [])
 
     useEffect(() => {

@@ -9,9 +9,50 @@ import { data } from "react-router-dom";
 
 const MyEnrollments = () => {
 
-  const [progressArray, setProgressArray] = useState([]);
+const [progressArray, setProgressArray] = useState([]);
 
-const {enrolledCourses, calculateCourseDuration, navigate} = useContext(AppContext)
+const {enrolledCourses, calculateCourseDuration, navigate, userData, fetchUserEnrolledCourses, backendUrl, getToken, calculateNoOfLectures} = useContext(AppContext)
+
+useEffect(() => {
+    fetchUserEnrolledCourses()
+}, [])
+
+const getCourseProgress = async () => {
+	try {
+		const token = await getToken()
+		const tempProgressArray = await Promise.all(
+			enrolledCourses.map(async (course) => {
+				const {data} = await axios.get(backendUrl + '/api/user/course-progress', {courseId: course._id},{
+					headers: {
+						Authorization: `Bearer ${token}`
+					}
+				})
+
+				let lectureCompleted = data.progressData ? data.progressData.lectureCompleted.length : 0
+				let totalLectures = calculateNoOfLectures(course)
+				return {
+					lectureCompleted,
+					totalLectures
+				} 
+			})
+		)
+		setProgressArray(tempProgressArray)
+	} catch (error) {
+		toast.error(error.message)
+	}
+}
+
+useEffect(() => {
+if(userData){
+	fetchUserEnrolledCourses()
+}}, [userData])
+
+useEffect(() => {
+if(enrolledCourses.length > 0){
+	getCourseProgress()
+}}, [enrolledCourses])
+
+
 
   return (
 		<>

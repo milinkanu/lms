@@ -154,7 +154,8 @@ export const updateUserCourseProgress = async (req, res) => {
     try {
         const userId = req.auth.userId;
         const { courseId, lectureId } = req.body;
-        const progressData = await CourseProgress.findOne({ userId, courseId })
+        const user = await User.findOne({ id: userId });
+        const progressData = await CourseProgress.findOne({ userId: user._id, courseId })
 
         if (progressData) {
             if (progressData.lectureCompleted.includes(lectureId)) {
@@ -167,7 +168,7 @@ export const updateUserCourseProgress = async (req, res) => {
             await progressData.save();
         } else {
             const newProgressData = {
-                userId,
+                userId: user._id,
                 courseId,
                 lectureCompleted: [lectureId],
             }
@@ -190,8 +191,9 @@ export const updateUserCourseProgress = async (req, res) => {
 export const getUserCourseProgress = async (req, res) => {
     try {
         const userId = req.auth.userId;
-        const { courseId } = req.body;
-        const progressData = await CourseProgress.findOne({ userId, courseId })
+        const { courseId } = req.query;
+        const user = await User.findOne({ id: userId });
+        const progressData = await CourseProgress.findOne({ userId: user._id, courseId })
 
         if (progressData) {
             return res.json({
@@ -220,7 +222,7 @@ export const addUserRatingToCourse = async (req, res) => {
         const userId = req.auth.userId;
         const { courseId, rating } = req.body;
         const courseData = await Course.findById(courseId);
-        const user = await User.findById(userId);
+        const user = await User.findOne({ id: userId });
 
         if (!userId || !courseId || rating < 1 || rating > 5) {
             return res.json({
