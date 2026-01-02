@@ -17,7 +17,7 @@ const Footer = () => {
 	};
 
 	return (
-		<footer className="bg-gray-900 md:px-36 text-left w-full mt-10">
+		<footer className="bg-gray-900 md:px-36 text-left w-full mt-10 dark:bg-slate-950">
 			<div className="flex flex-col md:flex-row items-start px-8 md:px-0 justify-center gap-10 md:gap-32 py-10 border-b border-white/30">
 				<div className="flex flex-col md:items-start items-center w-full">
 					<img src={assets.logo_dark} alt="logo" />
@@ -68,7 +68,7 @@ const Footer = () => {
 					</div>
 					<div className=" ml-8 mt-5 md:ml-0 md:mt-0">
 
-					{/* <SocialIcons /> */}
+						{/* <SocialIcons /> */}
 					</div>
 				</div>
 			</div>

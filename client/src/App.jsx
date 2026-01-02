@@ -14,32 +14,36 @@ import StudentsEnrolled from './pages/educator/StudentsEnrolled'
 import Navbar from './components/student/Navbar'
 import { ToastContainer } from 'react-toastify';
 
+import { ThemeProvider } from './context/ThemeContext';
+
 const App = () => {
 
   const isEducatorRoute = useMatch('/educator/*')
 
   return (
-    <div className='text-default min-h-screen bg-white'>
-      <ToastContainer />
-      {!isEducatorRoute && <Navbar />}
-      
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/course-list' element={<CoursesList />} />
-        <Route path='/course-list/:input' element={<CoursesList />} /> {/*  Filtered Course List */}
-        <Route path='/course/:id' element={<CourseDetails />} />
-        <Route path='/my-enrollments' element={<MyEnrollments />} />
-        <Route path='/player/:courseId' element={<Player />} />
-        <Route path='/loading/:path' element={<Loading />}
-         />
-        <Route path='/educator' element={<Educator />}>
-          <Route path='/educator' element={<Dashboard />}/>
-          <Route path='add-course' element={<AddCourse />}/>
-          <Route path='my-courses' element={<MyCourses />}/>
-          <Route path='student-enrolled' element={<StudentsEnrolled />}/>
-        </Route>
-      </Routes>
-    </div>
+    <ThemeProvider>
+      <div className='text-default min-h-screen bg-white text-gray-900 dark:bg-slate-900 dark:text-white transition-colors duration-300'>
+        <ToastContainer />
+        {!isEducatorRoute && <Navbar />}
+
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/course-list' element={<CoursesList />} />
+          <Route path='/course-list/:input' element={<CoursesList />} /> {/*  Filtered Course List */}
+          <Route path='/course/:id' element={<CourseDetails />} />
+          <Route path='/my-enrollments' element={<MyEnrollments />} />
+          <Route path='/player/:courseId' element={<Player />} />
+          <Route path='/loading/:path' element={<Loading />}
+          />
+          <Route path='/educator' element={<Educator />}>
+            <Route path='/educator' element={<Dashboard />} />
+            <Route path='add-course' element={<AddCourse />} />
+            <Route path='my-courses' element={<MyCourses />} />
+            <Route path='student-enrolled' element={<StudentsEnrolled />} />
+          </Route>
+        </Routes>
+      </div>
+    </ThemeProvider>
   )
 }
 

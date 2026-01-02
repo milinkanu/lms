@@ -5,7 +5,7 @@ import Sidebar from '../../components/educator/Sidebar'
 import Footer from '../../components/educator/Footer'
 const Educator = () => {
   return (
-    <div className='text-default min-h-screen bg-white'>
+    <div className='text-default min-h-screen bg-white dark:bg-slate-900 dark:text-gray-100'>
       <Navbar />
       <div className='flex'>
         <Sidebar />

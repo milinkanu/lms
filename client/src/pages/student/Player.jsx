@@ -114,12 +114,12 @@ const Player = () => {
     <>
       <div className='p-4 sm:p-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-10 md:px-36'>
         {/* left column */}
-        <div className='text-gray-800'>
+        <div className='text-gray-800 dark:text-gray-100'>
           <h2 className='text-xl font-semibold'>Course Structure</h2>
 
           <div className='pt-5'>
             {courseData && courseData.courseContent.map((chapter, index) => (
-              <div key={index} className='border border-gray-300 bg-white mb-2 rounded'>
+              <div key={index} className='border border-gray-300 bg-white mb-2 rounded dark:bg-slate-800 dark:border-gray-700'>
                 <div className='flex items-center justify-between px-4 py-3 cursor-pointer select-none' onClick={() => toggleSection(index)}>
                   <div className='flex items-center gap-2'>
                     <img className={`transform transition-transform ${openSection[index] ? 'rotate-180' : ''}`} src={assets.down_arrow_icon} alt="arrow icon" />
@@ -129,11 +129,11 @@ const Player = () => {
                 </div>
 
                 <div className={`overflow-hidden transition-all duration-300 ${openSection[index] ? 'max-h-96' : 'max-h-0'}`} >
-                  <ul className='list-disc md:pl-10 p-4 py-2 text-gray-600 border-t border-gray-300'>
+                  <ul className='list-disc md:pl-10 p-4 py-2 text-gray-600 border-t border-gray-300 dark:text-gray-400 dark:border-gray-700'>
                     {chapter.chapterContent.map((lecture, i) => (
                       <li key={i} className='flex items-start gap-2 py-1'>
                         <img src={progressData && progressData.lectureCompleted.includes(lecture.lectureId) ? assets.blue_tick_icon : assets.play_icon} alt="play icon" className='w-4 h-4 mt-1' />
-                        <div className='flex items-center justify-between w-full text-gray-800  md:text-default'>
+                        <div className='flex items-center justify-between w-full text-gray-800  md:text-default dark:text-gray-100'>
                           <p>{lecture.lectureTitle}</p>
                           <div className='flex gap-2'>
                             {lecture.lectureUrl && <p

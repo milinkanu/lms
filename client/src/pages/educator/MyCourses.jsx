@@ -50,7 +50,7 @@ const MyCourses = () => {
 
             <tbody className="text-sm text-gray-500">
               {courses.map((course) => (
-                <tr key={course._id} className="border-b border-gray-500/20 ">
+                <tr key={course._id} className="border-b border-gray-500/20 dark:border-gray-500/50">
                   <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
 
 

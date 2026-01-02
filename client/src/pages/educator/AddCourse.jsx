@@ -145,13 +145,13 @@ const AddCourse = () => {
 
   return (
     <div className='h-screen overflow-scroll flex flex-col items-start justify-between gap-8 md:p-8 md:pb-0 p-4 pt-8 pb-0'>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4 max-w-md w-full text-gray-500'>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-4 max-w-md w-full text-gray-500 dark:text-gray-400'>
         <div className="block sm:hidden ">
           <Logger />
         </div>
         <div className='flex flex-col gap-1'>
           <p>Course Title: </p>
-          <input onChange={e => setCourseTitle(e.target.value)} value={courseTitle} type="text" placeholder='Type here' className='outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500' required />
+          <input onChange={e => setCourseTitle(e.target.value)} value={courseTitle} type="text" placeholder='Type here' className='outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500 dark:bg-slate-800 dark:border-gray-700 dark:text-gray-100' required />
 
         </div>
 
@@ -164,7 +164,7 @@ const AddCourse = () => {
         <div className='flex items-center justify-between flex-wrap'>
           <div className='flex flex-col gap-1'>
             <p>Course Price</p>
-            <input onChange={e => setCoursePrice(e.target.value)} value={coursePrice} type="number" placeholder='0' className='outline-none md:py-2.5 w-28 py-2 px-3 rounded border border-gray-500' required />
+            <input onChange={e => setCoursePrice(e.target.value)} value={coursePrice} type="number" placeholder='0' className='outline-none md:py-2.5 w-28 py-2 px-3 rounded border border-gray-500 dark:bg-slate-800 dark:border-gray-700 dark:text-gray-100' required />
           </div>
 
           <div className='flex md:flex-row flex-col items-center gap-3 mt-5'>
@@ -187,7 +187,7 @@ const AddCourse = () => {
         {/* Adding chapters & lectures  */}
         <div>
           {chapters.map((chapter, chapterIndex) => (
-            <div key={chapterIndex} className='bg-white border rounded-lg mb-4'>
+            <div key={chapterIndex} className='bg-white border rounded-lg mb-4 dark:bg-slate-800 dark:border-gray-700'>
               <div className='flex justify-between items-center p-4 border-b'>
                 <div className='flex items-center'>
                   <img onClick={() => handleChapter('toggle', chapter.chapterId)} width={14} className={`mr-2 cursor-pointer transition-all ${chapter.collapsed && "-rotate-90"}`} src={assets.dropdown_icon} alt="" />
@@ -220,13 +220,13 @@ const AddCourse = () => {
           {
             showPopup && (
               <div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50'>
-                <div className='bg-white text-gray-700 p-4 rounded relative w-full max-w-80'>
+                <div className='bg-white text-gray-700 p-4 rounded relative w-full max-w-80 dark:bg-slate-800 dark:text-gray-200 dark:border dark:border-gray-700'>
                   <h2 className='text-lg font-semibold mb-4'>Add Lecture</h2>
 
                   <div className='mb-2'>
                     <p>Lecture Title</p>
                     <input type="text"
-                      className='mt-1 block w-full border rounded py-1 px-2'
+                      className='mt-1 block w-full border rounded py-1 px-2 dark:bg-slate-700 dark:border-gray-600'
                       value={lectureDetails.lectureTitle}
                       onChange={(e) => setLectureDetails({ ...lectureDetails, lectureTitle: e.target.value })}
                     />
@@ -256,7 +256,7 @@ const AddCourse = () => {
                     <p>Is Preview Free? </p>
                     <input
                       type="checkbox"
-                      className='mt-1 block w-full border rounded py-1 px-2'
+                      className='mt-1 block w-full border rounded py-1 px-2 dark:bg-slate-700 dark:border-gray-600'
                       checked={lectureDetails.isPreviewFree}
                       onChange={(e) => setLectureDetails({ ...lectureDetails, isPreviewFree: e.target.checked })}
                     />

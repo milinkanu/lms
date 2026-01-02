@@ -64,8 +64,8 @@ const CourseDetails = () => {
     fetchCourseData()
   }, [])
 
-  useEffect(()=>{
-    if(userData && courseData){
+  useEffect(() => {
+    if (userData && courseData) {
       setIsAlreadyEnrolled(userData.enrolledCourses.includes(courseData._id))
     }
   }, [userData, courseData])
@@ -87,8 +87,8 @@ const CourseDetails = () => {
         <div className='absolute top-0 left-0 w-full h-section-height -z-1 bg-linear-to-b from-cyan-100/70'></div>
 
         {/* left column */}
-        <div className='max-w-xl z-10 text-gray-500'>
-          <h1 className='md:text-course-details-heading-large text-course-details-heading-small font-semibold text-gray-800'>{courseData.courseTitle}</h1>
+        <div className='max-w-xl z-10 text-gray-500 dark:text-gray-400'>
+          <h1 className='md:text-course-details-heading-large text-course-details-heading-small font-semibold text-gray-800 dark:text-gray-100'>{courseData.courseTitle}</h1>
           <p className='pt-4 md:text-base text-sm' dangerouslySetInnerHTML={{ __html: courseData.courseDescription.slice(0, 200) }}></p>
 
           {/* revive and rating */}
@@ -105,12 +105,12 @@ const CourseDetails = () => {
 
           <p className='text-sm'> Course by <span className='text-blue-600 underline'>{courseData.educator.name}</span></p>
 
-          <div className='pt-8 text-gray-800'>
+          <div className='pt-8 text-gray-800 dark:text-gray-100'>
             <h2 className='text-xl font-semibold'>Course Structure</h2>
 
             <div className='pt-5'>
               {courseData.courseContent.map((chapter, index) => (
-                <div key={index} className='border border-gray-300 bg-white mb-2 rounded'>
+                <div key={index} className='border border-gray-300 bg-white mb-2 rounded dark:bg-slate-800 dark:border-gray-700'>
                   <div className='flex items-center justify-between px-4 py-3 cursor-pointer select-none' onClick={() => toggleSection(index)}>
                     <div className='flex items-center gap-2'>
                       <img className={`transform transition-transform ${openSection[index] ? 'rotate-180' : ''}`} src={assets.down_arrow_icon} alt="arrow icon" />
@@ -120,11 +120,11 @@ const CourseDetails = () => {
                   </div>
 
                   <div className={`overflow-hidden transition-all duration-300 ${openSection[index] ? 'max-h-96' : 'max-h-0'}`} >
-                    <ul className='list-disc md:pl-10 p-4 py-2 text-gray-600 border-t border-gray-300'>
+                    <ul className='list-disc md:pl-10 p-4 py-2 text-gray-600 border-t border-gray-300 dark:text-gray-400 dark:border-gray-700'>
                       {chapter.chapterContent.map((lecture, i) => (
                         <li key={i} className='flex items-start gap-2 py-1'>
                           <img src={assets.play_icon} alt="play icon" className='w-4 h-4 mt-1' />
-                          <div className='flex items-center justify-between w-full text-gray-800  md:text-default'>
+                          <div className='flex items-center justify-between w-full text-gray-800  md:text-default dark:text-gray-100'>
                             <p>{lecture.lectureTitle}</p>
                             <div className='flex gap-2'>
                               {lecture.isPreviewFree && <p
@@ -145,11 +145,11 @@ const CourseDetails = () => {
             </div>
           </div>
           <div className="py-20 text-sm md:text-default">
-            <h3 className="text-xl font-semibold text-gray-800 ">
+            <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
               Course Description
             </h3>
             <p
-              className="pt-3 rich-text"
+              className="pt-3 rich-text  dark:text-gray-400"
               dangerouslySetInnerHTML={{
                 __html: courseData.courseDescription,
               }}
@@ -159,7 +159,7 @@ const CourseDetails = () => {
 
 
         {/* right column */}
-        <div className="max-w-course-card z-10 shadow-custom-card rounded-t md:rounded-none overflow-hidden bg-white min-w-course-card">
+        <div className="max-w-course-card z-10 shadow-custom-card rounded-t md:rounded-none overflow-hidden bg-white min-w-course-card dark:bg-slate-800">
           {playerData ? (
             <YouTube
               videoId={playerData.videoId}
@@ -184,22 +184,22 @@ const CourseDetails = () => {
             </div>
 
             <div className="flex gap-3 items-center pt-2">
-              <p className="text-gray-800 md:text-4xl text-2xl font-semibold">
+              <p className="text-gray-800 md:text-4xl text-2xl font-semibold dark:text-gray-100">
                 {currency}{" "}
                 {(
                   courseData.coursePrice -
                   (courseData.discount * courseData.coursePrice) / 100
                 ).toFixed(2)}
               </p>
-              <p className="md:text-lg text-gray-500 line-through">
+              <p className="md:text-lg text-gray-500 line-through dark:text-gray-400">
                 {currency} {courseData.coursePrice}{" "}
               </p>
-              <p className="md:text-lg text-gray-500">
+              <p className="md:text-lg text-gray-500 dark:text-gray-400">
                 {currency} {courseData.discount}% off{" "}
               </p>
             </div>
 
-            <div className="flex items-center text-sm md:text-default gap-4 pt-2 md:pt-4 text-gray-500">
+            <div className="flex items-center text-sm md:text-default gap-4 pt-2 md:pt-4 text-gray-500 dark:text-gray-400">
               <div className="flex items-center gap-1">
                 <img src={assets.star} alt="star icon" />
                 <p>{calculateRating(courseData)}</p>
@@ -242,10 +242,10 @@ const CourseDetails = () => {
             </div>
 
             <div className="pt-6">
-              <p className="md:text-xl text-lg font-medium text-gray-800">
+              <p className="md:text-xl text-lg font-medium text-gray-800 dark:text-gray-100">
                 What's in the course?{" "}
               </p>
-              <ul className="ml-4 pt-2 text-sm md:text-default list-disc text-gray-500">
+              <ul className="ml-4 pt-2 text-sm md:text-default list-disc text-gray-500 dark:text-gray-400">
                 <li>Lifetime access with free updates.</li>
                 <li>Step-by-step, hands-on project guidance.</li>
                 <li>Downloadable resources and source code.</li>
